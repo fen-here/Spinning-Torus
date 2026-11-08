@@ -33,9 +33,9 @@ AI was used to help understand the core math equations behind the project and cl
 ### 1. Defining the Torus and Center
 First, I needed to define the structural geometry of the torus using parametric equations:
 
-\[x = (R_2 + R_1 \cos\theta)\cos\phi\]
-\[y = (R_2 + R_1 \cos\theta)\sin\phi\]
-\[z = R_1 \sin\theta\]
+$[x = (R_2 + R_1 \cos\theta)\cos\phi\]$
+$[y = (R_2 + R_1 \cos\theta)\sin\phi\]$
+$[z = R_1 \sin\theta\]$
 
 ```python
 theta = 0.0
