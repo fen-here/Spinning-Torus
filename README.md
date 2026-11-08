@@ -1,5 +1,5 @@
-# Spinning-Torus
-I made a donut spin :D
+# Spinning Torus
+I made a donut spin! :D
 
                                                             :;;;;=                                                         
                                                        ~:;;;:::::;==!                                                     
@@ -13,67 +13,61 @@ I made a donut spin :D
                                                       -~::::;;;;;==!*                                                     
                                                           :;;;;==   
 
+---
+
+## Project Inspiration
+I wanted to understand how to create 3D geometry using code and render it directly to a screen. I was highly inspired by videos of rotating objects rendered in ASCII art. This project allowed me to learn foundational mathematics and break a complex programming problem down into understandable concepts.
+
+### What I Learned:
+*   The geometric math of a torus
+*   Writing and implementing pseudocode
+*   Shading mathematical objects and implementing a rendering pipeline
+
+##### Did I use AI?
+AI was used to help understand the core math equations behind the project and clarify the pseudocode structures. The actual Python implementation of the math was written entirely by me.
 
 ---
 
-## Inspiration of this:
-I wanted to understand how you create geomatry with code and how to render it to a screen. I was some what inspired by videos of rotating objects in ascii. This allowed me to learn the math concepts and break the project down into a understandable concepts.
+## The Math Behind It
 
-### What I learnt:
-- The geometric math of a torus
-- Sudo Code
-- shading mathimatical objects and rendering to a screen.
+### 1. Defining the Torus and Center
+First, I needed to define the structural geometry of the torus using parametric equations:
 
-##### Did I use AI?
-AI was used to understand the math behind the project and help explain the Sudo code for the project. The math implementation was written by me.
+\[x = (R_2 + R_1 \cos\theta)\cos\phi\]
+\[y = (R_2 + R_1 \cos\theta)\sin\phi\]
+\[z = R_1 \sin\theta\]
 
-
-### Math behind it:
-### defining the torus and the center
-For this I had to create the torus. 
-
-$x=(r_1+R_2cos0)-cos0$
-
-$y=(R_2+R_1cos0)-sin0$
-
-$z=R_1sin0$
-
-```py
+```python
 theta = 0.0
-    while theta < 2 * math.pi:
-        cos_theta = math.cos(theta)
-        sin_theta = math.sin(theta)
+while theta < 2 * math.pi:
+    cos_theta = math.cos(theta)
+    sin_theta = math.sin(theta)
 
-        sin_A, cos_A = math.sin(A), math.cos(A)
-        sin_B, cos_B = math.sin(B), math.cos(B)
+    sin_A, cos_A = math.sin(A), math.cos(A)
+    sin_B, cos_B = math.sin(B), math.cos(B)
 
-        phi = 0.0
-        while phi < 2 * math.pi:
-            cos_phi = math.cos(phi)
-            sin_phi = math.sin(phi)
+    phi = 0.0
+    while phi < 2 * math.pi:
+        cos_phi = math.cos(phi)
+        sin_phi = math.sin(phi)
 
-            torus_x = R2 + R1 * cos_theta
-            torus_y = R1 * sin_theta  
+        torus_x = R2 + R1 * cos_theta
+        torus_y = R1 * sin_theta  
 
-            local_x = torus_x * cos_phi
-            local_y = torus_x * sin_phi
-            local_z = torus_y
+        local_x = torus_x * cos_phi
+        local_y = torus_x * sin_phi
+        local_z = torus_y
 ```
 
+### 2. Spinning the Torus
+The next part involved calculating the real-time rotation matrices of the torus across multiple axes (\(A\) and \(B\)). 
 
+\[x' = x \cos B - z \sin B\]
+\[z' = x \sin B + z \cos B\]
+\[y'' = y' \cos A - z' \sin A\]
+\[z'' = y' \sin A + z' \cos A\]
 
-### Spinning the Torus:
-The next part was calculating the rotation of the torus. This concept was hard for me to understand.
-
-$x^1=xcosB-zsinB$
-
-$z^1=xsinB+zcosB$
-
-$y^n=y^1cosA-z^1sinA$
-
-$z^n=y^1sinA+z^1cosA$
-
-```py
+```python
 rot_x = local_x * cos_B - local_z * sin_B
 rot_z = local_x * sin_B + local_z * cos_B
 rot_y = local_y
@@ -85,16 +79,13 @@ z_3d = K2 + rot_y * sin_A + rot_z * cos_A
 ooz = 1.0 / z_3d
 ```
 
-### Calculates the points:
-This was calculating the points of the torus to the screen width as well as getting the values of the torus to the screen. This is important for shading the object in ascii appropriate to it's **Z-depth**.
+### 3. Calculating the Screen Points
+This phase projects the 3D coordinates onto a 2D screen coordinate system based on the screen width and height. This step tracks \(1/z\) (`ooz`), which is essential for shading the object appropriately based on its **Z-depth**.
 
-$x_screen=center_x+k_1*x/z$
+\[x_{\text{screen}} = \text{center}_x + K_1 \cdot \frac{x}{z}\]
+\[y_{\text{screen}} = \text{center}_y - K_1 \cdot \frac{y}{z}\]
 
-$y_screen=center_y-K_1*y/z$
-
-$N^->=(cos0-cos0, cos0-sin0,sin0)$
-
-```py
+```python
 xp = int(SCREEN_WIDTH / 2 + K1 * ooz * x_3d)
 yp = int(SCREEN_HEIGHT / 2 - K1 * ooz * y_3d)
 
@@ -103,34 +94,33 @@ ny = cos_theta * sin_phi
 nz = -cos_theta * cos_phi * cos_B + sin_theta * sin_B
 ```
 
+### 4. Calculating Shading and Lighting
+Here, the code checks the surface normal against a light source vector. It uses a **Z-buffer** to ensure that closer points overwrite points behind them, preventing the back of the donut from bleeding through the front.
 
+\[\frac{1}{z_{\text{new}}} > \frac{1}{z_{\text{existing}}}\]
+\[\vec{N} \cdot \vec{L} = (n_x \cdot 0) + (n_y \cdot 1) + (n_z \cdot -1) = n_y - n_z\]
 
-#### Calculates the shading and lighting:
-This was the running reach point of the torus and adding the character to the shading value.
-
-$1/z_new>1/z_existing$
-
-$N^->*L^->=(n_x * 0)+(n_y*1)+(n_z*-1)=n_y-n_z$
-
-```py
+```python
 raw_L = (ny - nz) / 1.41421
 L = (raw_L + 1.0) / 2.0
 
 if 0 <= xp < SCREEN_WIDTH and 0 <= yp < SCREEN_HEIGHT:
-  if ooz > Z_BUFFER[yp][xp]:
-    Z_BUFFER[yp][xp] = ooz
-    char_index = int(L * (len(Aascii_chars) - 1))
-    if char_index >= len(Aascii_chars):
-      char_index = len(Aascii_chars) - 1
-    SCREEN_BUFFER[yp][xp] = Aascii_chars[char_index]
+    if ooz > Z_BUFFER[yp][xp]:
+        Z_BUFFER[yp][xp] = ooz
+        char_index = int(L * (len(ASCII_CHARS) - 1))
+        if char_index >= len(ASCII_CHARS):
+            char_index = len(ASCII_CHARS) - 1
+        SCREEN_BUFFER[yp][xp] = ASCII_CHARS[char_index]
 ```
 
-### Rendering:
-```py
+### 5. Rendering to the Screen
+Finally, the nested loops iterate through the screen buffer grid to blit the text characters frame-by-frame using Pygame.
+
+```python
 for y in range(SCREEN_HEIGHT):
-  for x in range(SCREEN_WIDTH):
-    char_token = SCREEN_BUFFER[y][x]
-    if char_token != " ":
-      text_surface = font.render(char_token, True, (255, 255, 255))
-      screen.blit(text_surface, (x * X_SPACE, y * Y_SPACE))
+    for x in range(SCREEN_WIDTH):
+        char_token = SCREEN_BUFFER[y][x]
+        if char_token != " ":
+            text_surface = font.render(char_token, True, (255, 255, 255))
+            screen.blit(text_surface, (x * X_SPACE, y * Y_SPACE))
 ```
