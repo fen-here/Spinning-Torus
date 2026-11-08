@@ -62,6 +62,7 @@ theta = 0.0
 
 ### Spinning the Torus:
 The next part was calculating the rotation of the torus. This concept was hard for me to understand.
+
 $x^1=xcosB-zsinB$
 $z^1=xsinB+zcosB$
 $y^n = y^1 cos A - z^1 sin A$
@@ -95,13 +96,19 @@ ny = cos_theta * sin_phi
 nz = -cos_theta * cos_phi * cos_B + sin_theta * sin_B
 ```
 
-#### Calculating Shading:
-$N^->*L^->=(n_x * 0)+(n_y*1)+(n_z*-1)=n_y-n_z$
+
 
 #### Calculates the shading and lighting:
+This was the running reach point of the torus and adding the character to the shading value.
+
 $1/z_new>1/z_existing$
 
+$N^->*L^->=(n_x * 0)+(n_y*1)+(n_z*-1)=n_y-n_z$
+
 ```py
+raw_L = (ny - nz) / 1.41421
+L = (raw_L + 1.0) / 2.0
+
 if 0 <= xp < SCREEN_WIDTH and 0 <= yp < SCREEN_HEIGHT:
   if ooz > Z_BUFFER[yp][xp]:
     Z_BUFFER[yp][xp] = ooz
@@ -110,7 +117,6 @@ if 0 <= xp < SCREEN_WIDTH and 0 <= yp < SCREEN_HEIGHT:
       char_index = len(Aascii_chars) - 1
     SCREEN_BUFFER[yp][xp] = Aascii_chars[char_index]
 ```
-
 
 ### Rendering:
 ```py
