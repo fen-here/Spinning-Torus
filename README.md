@@ -6,30 +6,31 @@ I made a donut spin :D
 Math behind it:
 
 ### defining the torus and the center
-$x = (r_1 + R_2 cos0)-cos0$
+$x=(r_1+R_2 cos0)-cos0$
 $y=(R_2+R_1cos0)-sin0$
-$z = R_1sin0$
+$z=R_1sin0$
 
 ### Spinning the Torus:
-$x^1 = x cosB - z sinB$
-$z^1 = x sinB + z cosB$
+$x^1=xcosB-zsinB$
+$z^1=xsinB+zcosB$
 
 $y^n = y^1 cos A - z^1 sin A$
 $z^n = y^1 sin A + z^1 cos A$
 
 ### Calculates the points:
-$ x_screen = center_x + k_1 * x / z$
-$ y_screen = center_y - K_1 * y / z$
+
+$x_screen=center_x+k_1*x/z$
+$y_screen=center_y-K_1*y/z$
 
 ### Shading of the axies:
-$ N^-> = (cos0-cos0, cos0-sin0,sin0)$
+$N^->=(cos0-cos0, cos0-sin0,sin0)$
 
 #### Calculating Shading:
-$ N^->*L^-> = (n_x * 0) +(n_y*1)+(n_z*-1) = n_y - n_z$
+$N^->*L^->=(n_x * 0)+(n_y*1)+(n_z*-1)=n_y-n_z$
 
 #### Calculates the shading and lighting:
 
-$ 1/z_new > 1/z_existing $
+$1/z_new>1/z_existing$
 
 ```py
 if 0 <= xp < SCREEN_WIDTH and 0 <= yp < SCREEN_HEIGHT:
