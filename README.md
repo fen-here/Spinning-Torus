@@ -32,8 +32,10 @@ AI was used to understand the math behind the project and help explain the Sudo 
 ### defining the torus and the center
 For this I had to create the torus. 
 
-$x=(r_1+R_2 cos0)-cos0$
+$x=(r_1+R_2cos0)-cos0$
+
 $y=(R_2+R_1cos0)-sin0$
+
 $z=R_1sin0$
 
 ```py
@@ -64,9 +66,12 @@ theta = 0.0
 The next part was calculating the rotation of the torus. This concept was hard for me to understand.
 
 $x^1=xcosB-zsinB$
+
 $z^1=xsinB+zcosB$
-$y^n = y^1 cos A - z^1 sin A$
-$z^n = y^1 sin A + z^1 cos A$
+
+$y^n=y^1cosA-z^1sinA$
+
+$z^n=y^1sinA+z^1cosA$
 
 ```py
 rot_x = local_x * cos_B - local_z * sin_B
@@ -84,7 +89,9 @@ ooz = 1.0 / z_3d
 This was calculating the points of the torus to the screen width as well as getting the values of the torus to the screen. This is important for shading the object in ascii appropriate to it's **Z-depth**.
 
 $x_screen=center_x+k_1*x/z$
+
 $y_screen=center_y-K_1*y/z$
+
 $N^->=(cos0-cos0, cos0-sin0,sin0)$
 
 ```py
